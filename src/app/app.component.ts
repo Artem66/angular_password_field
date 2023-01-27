@@ -24,18 +24,30 @@ export class AppComponent {
       this.colorMedium = 'red';
       this.colorStrong = 'red';
     }
+    
+    const regLetters = /^(?=.*[a-zA-Z])/;
+    const regNumbers = /^(?=.*[0-9])/;
+    const regSymbols = /^(?=.*[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~])/;
 
-    const isValidEasy = /^[a-zA-Z]+$/.test(value)
-    || /^[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]+$/.test(value)
-    || /^[0-9]+$/.test(value);
+    const isValidEasy = value.match(regLetters)
+    || value.match(regNumbers)
+    || value.match(regSymbols);
 
-    const hasLettersNumbers = value.match(/^(?=.*[a-zA-Z])/) && value.match(/^(?=.*[0-9])/) && !value.match(/^(?=.*[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~])/);
-    const hasNumbersSymbols = value.match(/^(?=.*[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~])/) && value.match(/^(?=.*[0-9])/) && !value.match(/^(?=.*[a-zA-Z])/);
-    const hasSymbolsLetters = value.match(/^(?=.*[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~])/) && value.match(/^(?=.*[a-zA-Z])/) && !value.match(/^(?=.*[0-9])/);
-    const hasLettersNumbersSymbols = value.match(/^(?=.*[a-zA-Z])/) && value.match(/^(?=.*[0-9])/) && value.match(/^(?=.*[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~])/);
-    const isValidMedium = hasLettersNumbers || hasNumbersSymbols || hasSymbolsLetters;
-
-    console.log('isValidMedium: ', isValidMedium);
+    const hasLettersNumbers = value.match(regLetters)
+      && value.match(regNumbers)
+      && !value.match(regSymbols);
+    const hasNumbersSymbols = value.match(regSymbols)
+      && value.match(regNumbers)
+      && !value.match(regLetters);
+    const hasSymbolsLetters = value.match(regSymbols)
+      && value.match(regLetters)
+      && !value.match(regNumbers);
+    const hasLettersNumbersSymbols = value.match(regLetters)
+      && value.match(regNumbers)
+      && value.match(regSymbols);
+    const isValidMedium = hasLettersNumbers 
+      || hasNumbersSymbols
+      || hasSymbolsLetters;
     
 
     if (value.length >= 8
@@ -50,9 +62,6 @@ export class AppComponent {
       this.colorEasy = 'yellow';
       this.colorMedium = 'yellow';
     }
-    //  else {
-    //   this.colorMedium = 'red';
-    // }
 
     if (value.length >= 8
       && hasLettersNumbersSymbols) {
@@ -60,8 +69,5 @@ export class AppComponent {
         this.colorMedium = 'green';
         this.colorStrong = 'green';
     }
-    //  else {
-    //   this.colorStrong = 'red';
-    // }
   }
 }
