@@ -3,30 +3,65 @@ import { Component } from '@angular/core';
 @Component({
   selector: 'app-root',
   template: `
-    <!--The content below is only a placeholder and can be replaced.-->
-    <div style="text-align:center" class="content">
-      <h1>
-        Welcome to {{title}}!
-      </h1>
-      <span style="display: block">{{ title }} app is running!</span>
-      <img width="300" alt="Angular Logo" src="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCAyNTAgMjUwIj4KICAgIDxwYXRoIGZpbGw9IiNERDAwMzEiIGQ9Ik0xMjUgMzBMMzEuOSA2My4ybDE0LjIgMTIzLjFMMTI1IDIzMGw3OC45LTQzLjcgMTQuMi0xMjMuMXoiIC8+CiAgICA8cGF0aCBmaWxsPSIjQzMwMDJGIiBkPSJNMTI1IDMwdjIyLjItLjFWMjMwbDc4LjktNDMuNyAxNC4yLTEyMy4xTDEyNSAzMHoiIC8+CiAgICA8cGF0aCAgZmlsbD0iI0ZGRkZGRiIgZD0iTTEyNSA1Mi4xTDY2LjggMTgyLjZoMjEuN2wxMS43LTI5LjJoNDkuNGwxMS43IDI5LjJIMTgzTDEyNSA1Mi4xem0xNyA4My4zaC0zNGwxNy00MC45IDE3IDQwLjl6IiAvPgogIDwvc3ZnPg==">
-    </div>
-    <h2>Here are some links to help you start: </h2>
-    <ul>
-      <li>
-        <h2><a target="_blank" rel="noopener" href="https://angular.io/tutorial">Tour of Heroes</a></h2>
-      </li>
-      <li>
-        <h2><a target="_blank" rel="noopener" href="https://angular.io/cli">CLI Documentation</a></h2>
-      </li>
-      <li>
-        <h2><a target="_blank" rel="noopener" href="https://blog.angular.io/">Angular blog</a></h2>
-      </li>
-    </ul>
-    
+  <form type='submit'>
+    <input placeholder='enter password' #box  (keyup)="onKey(box.value)"/>
+    <p [style.color]="colorEasy">Only letters/digits/symbols - the password is easy;</p>
+    <p [style.color]='colorMedium'>Combination of letters-symbols/letters-digits/digits-symbols - the password is medium;</p>
+    <p [style.color]='colorStrong'>Has letters, symbols and numbers - the password is strong;</p>
+  </ form>
   `,
   styles: []
 })
 export class AppComponent {
   title = 'angular_password_field';
+  colorEasy = 'grey';
+  colorMedium = 'grey';
+  colorStrong = 'grey';
+  values = '';
+  onKey(value: string) {
+    if (value.length < 8) {
+      this.colorEasy = 'red';
+      this.colorMedium = 'red';
+      this.colorStrong = 'red';
+    }
+
+    const isValidEasy = /^[a-zA-Z]+$/.test(value)
+    || /^[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~]+$/.test(value)
+    || /^[0-9]+$/.test(value);
+
+    const hasLettersNumbers = value.match(/^(?=.*[a-zA-Z])/) && value.match(/^(?=.*[0-9])/) && !value.match(/^(?=.*[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~])/);
+    const hasNumbersSymbols = value.match(/^(?=.*[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~])/) && value.match(/^(?=.*[0-9])/) && !value.match(/^(?=.*[a-zA-Z])/);
+    const hasSymbolsLetters = value.match(/^(?=.*[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~])/) && value.match(/^(?=.*[a-zA-Z])/) && !value.match(/^(?=.*[0-9])/);
+    const hasLettersNumbersSymbols = value.match(/^(?=.*[a-zA-Z])/) && value.match(/^(?=.*[0-9])/) && value.match(/^(?=.*[`!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?~])/);
+    const isValidMedium = hasLettersNumbers || hasNumbersSymbols || hasSymbolsLetters;
+
+    console.log('isValidMedium: ', isValidMedium);
+    
+
+    if (value.length >= 8
+      && isValidEasy) {
+      this.colorEasy = 'green';
+      this.colorMedium = 'grey';
+      this.colorStrong = 'grey';
+    }
+
+    if (value.length >= 8
+       && isValidMedium) {
+      this.colorEasy = 'yellow';
+      this.colorMedium = 'yellow';
+    }
+    //  else {
+    //   this.colorMedium = 'red';
+    // }
+
+    if (value.length >= 8
+      && hasLettersNumbersSymbols) {
+        this.colorEasy = 'green';
+        this.colorMedium = 'green';
+        this.colorStrong = 'green';
+    }
+    //  else {
+    //   this.colorStrong = 'red';
+    // }
+  }
 }
