@@ -40,7 +40,7 @@ export class AppComponent {
 
     if (value.length >= 8
       && isValidEasy) {
-      this.colorEasy = 'green';
+      this.colorEasy = 'red';
       this.colorMedium = 'grey';
       this.colorStrong = 'grey';
     }
